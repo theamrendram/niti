@@ -41,7 +41,6 @@ const KanbanCard = ({ data, columnId }: KanbanCardComponentProps) => {
       aria-label={`Card: ${data.title}`}
       className="bg-white h-[200px] w-[250px] border rounded-md shadow p-2 flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-blue-500"
       tabIndex={0}>
-        
       {/* Top Badges */}
       <div className="flex justify-between gap-2">
         <div className="flex gap-2">

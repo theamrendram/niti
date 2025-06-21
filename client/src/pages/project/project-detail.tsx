@@ -72,7 +72,10 @@ const ProjectDetail = () => {
 
       if (fromIdx === -1) return prev;
 
-      const [movedCard] = fromCol.cardData.splice(fromIdx, 1) as kanbanCardProps[];
+      const [movedCard] = fromCol.cardData.splice(
+        fromIdx,
+        1
+      ) as kanbanCardProps[];
 
       // Same column sorting
       if (fromCol === toCol) {

@@ -11,7 +11,7 @@ import {
   SidebarProvider,
   // SidebarTrigger
 } from '@/components/ui/sidebar';
-import { Inbox, Calendar, Command, Mail, HomeIcon } from 'lucide-react';
+import { Inbox, Calendar, Mail, HomeIcon } from 'lucide-react';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -122,7 +122,7 @@ const AppSidebar = () => {
           </SidebarContent>
         </Sidebar>
 
-        <main className="flex-1 p-4">
+        <main className="flex-1">
           <Outlet />
         </main>
       </SidebarProvider>

@@ -23,14 +23,14 @@ const KanbanBoard = (props: kanbanBoardProps) => {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-        <SortableContext
-          items={props.cardData.map((card) => card.id)}
-          strategy={verticalListSortingStrategy}>
+          <SortableContext
+            items={props.cardData.map((card) => card.id)}
+            strategy={verticalListSortingStrategy}>
             {props.cardData.map((item) => (
               <KanbanCard key={item.id} data={item} columnId={props.title} />
             ))}
-        </SortableContext>
-          </div>
+          </SortableContext>
+        </div>
       </div>
     </div>
   );
