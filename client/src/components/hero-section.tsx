@@ -26,13 +26,13 @@ export function HeroSection() {
         <main className='max-w-7xl mx-auto px-6 pt-16 pb-20'>
           <div className='text-center mb-16'>
             <h1 className='text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight'>
-              AI-powered projects briefs
+              AI-powered projects management
               <br />
-              for designers
+              for teams
             </h1>
             <p className='text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed'>
-               Transform your ideas into comprehensive project briefs in seconds! Let AI create
-            your project brief while you focus on bringing your vision to life.
+               With intelligent automation, your team can align faster, prioritize smarter, and execute projects with clarity. 
+               Let AI handle the busywork so you can focus on collaboration, creativity, and delivering results.
             </p>
             <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-6 text rounded-full">
             Get started for free
@@ -51,7 +51,7 @@ export function HeroSection() {
             />
               
             </div>
-            <div className="flex items-center justify-center mt-8 space-x-4">
+            {/* <div className="flex items-center justify-center mt-8 space-x-4">
             <div className="flex -space-x-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 border-2 border-white"></div>
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-green-600 border-2 border-white"></div>
@@ -62,7 +62,44 @@ export function HeroSection() {
             <div className="text-sm text-gray-600">
               <span className="font-semibold">Join 50,000+ designers</span>
             </div>
-          </div>
+          </div> */}
+          <div className="flex flex-col items-center mt-8 space-y-3">
+  <div className="text-sm text-gray-700 text-center">
+    <span>Join <span className="font-semibold">100+</span> teams</span>
+  </div>
+
+  <div className="flex -space-x-3">
+    <img
+      className="w-8 h-8 rounded-full border-2 border-white"
+      src="/p1.jpg"
+      alt="user"
+    />
+    <img
+      className="w-8 h-8 rounded-full border-2 border-white"
+      src="/p2.jpg"
+      alt="user"
+    />
+    <img
+      className="w-8 h-8 rounded-full border-2 border-white"
+      src="/p3.jpeg"
+      alt="user"
+    />
+    <img
+      className="w-8 h-8 rounded-full border-2 border-white"
+      src="/p4.jpg"
+      alt="user"
+    />
+    <img
+      className="w-8 h-8 rounded-full border-2 border-white"
+      src="/p5.jpeg"
+      alt="user"
+    />
+    <div className="px-3 h-8 rounded-full bg-blue-100 text-blue-600 text-xs font-semibold flex items-center justify-center border-2 border-white">
+      99+
+    </div>
+  </div>
+</div>
+
 
           </div>
 
