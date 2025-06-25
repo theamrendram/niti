@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
+import HeroSection from "@/components/hero-section";
 const Home = () => {
   return (
     <div>
       <Navbar/>
-      this is homepage <Button>click</Button>
+      <HeroSection/>
     </div>
   );
 };
