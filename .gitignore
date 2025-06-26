@@ -131,3 +131,6 @@ coverage/
 # Misc
 *.tgz
 *.tar.gz
+references/
+
+
