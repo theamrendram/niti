@@ -22,7 +22,6 @@ import type {
 } from "@tanstack/react-table";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import ProjectForm from "./project-form";
 type DataTableProps<TData> = {
   columns: ColumnDef<TData, any>[];
   data: TData[];
@@ -61,13 +60,14 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
         <Button
           onClick={() => {
             setShowSheet(!showSheet);
-          }}>
+          }}
+        >
           Create Project
         </Button>
       </div>
 
       {/* Table */}
-      <div className="border rounded-md">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -78,7 +78,7 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -93,7 +93,7 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -115,7 +115,8 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
         <Button
           variant="outline"
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
+          disabled={!table.getCanPreviousPage()}
+        >
           Previous
         </Button>
         <span>
@@ -125,13 +126,11 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
         <Button
           variant="outline"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
+          disabled={!table.getCanNextPage()}
+        >
           Next
         </Button>
       </div>
-
-      {/* add project */}
-      <ProjectForm showSheet={showSheet} setShowSheet={setShowSheet} />
     </div>
   );
 };

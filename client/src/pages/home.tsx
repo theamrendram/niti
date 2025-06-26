@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import HeroSection from "@/components/hero-section";
 const Home = () => {

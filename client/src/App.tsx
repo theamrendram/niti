@@ -9,6 +9,7 @@ import AppSidebar from "./components/app-sidebar";
 import InboxPage from "./pages/dashboard/inbox";
 import TodoPage from "./pages/dashboard/to-do";
 import { Toaster } from "@/components/ui/sonner";
+import CreateProject from "./pages/project/create-project";
 function App() {
   return (
     <>
@@ -16,7 +17,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} /> 
+          <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<AppSidebar />}>
             <Route index element={<Dashboard />} />
             <Route path="org" element={<Organization />} />
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route path="/projects" element={<AppSidebar />}>
             <Route index element={<Projects />} />
+            <Route path="/projects/create" element={<CreateProject />} />
             <Route path=":projectId" element={<ProjectDetail />} />
           </Route>
           <Route path="/inbox" element={<AppSidebar />}>

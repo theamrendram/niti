@@ -1,12 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { type ReactNode } from "react";
-import {
-  Clock,
-  AlertCircle,
-  CalendarDays,
-} from "lucide-react";
+import { Clock, AlertCircle, CalendarDays } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 // Utility function to combine class names
 const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(" ");
@@ -56,10 +54,13 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto p-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Project Dashboard
           </h1>
+          <Button>
+            <Link to={"/projects/create"}>+ Create Project</Link>
+          </Button>
         </div>
 
         {/* Main Content */}

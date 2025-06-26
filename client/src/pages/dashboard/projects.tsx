@@ -14,13 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { truncate } from "@/lib/index";
-import ProjectForm from "@/components/project-form";
+import { Link } from "react-router-dom";
 
 export default function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [showProjectForm, setShowProjectForm] = useState(false);
 
   const data = [
     {
@@ -89,7 +88,7 @@ export default function Projects() {
   });
 
   const getPriorityColor = (
-    priority: string
+    priority: string,
   ):
     | "high"
     | "medium"
@@ -123,25 +122,28 @@ export default function Projects() {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-            <p className="text-gray-600 mt-1">
+            <p className="mt-1 text-gray-600">
               Manage and track your project progress
             </p>
           </div>
-          <Button
-            onClick={() => setShowProjectForm(true)}
-            className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            New Project
+          <Button className="flex items-center gap-2">
+            <Link
+              to="/projects/create"
+              className="flex items-center justify-center gap-1"
+            >
+              <Plus className="h-4 w-4" />
+              New Project
+            </Link>
           </Button>
         </div>
 
         {/* Search and Filters */}
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col gap-4 lg:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
             <Input
               placeholder="Search projects..."
               value={searchTerm}
@@ -177,7 +179,7 @@ export default function Projects() {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}
@@ -190,27 +192,21 @@ export default function Projects() {
 
       {/* Empty State */}
       {filteredProjects.length === 0 && (
-        <div className="text-center py-12">
-          <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+        <div className="py-12 text-center">
+          <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100">
             <Search className="h-8 w-8 text-gray-400" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="mb-2 text-lg font-medium text-gray-900">
             No projects found
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="mb-4 text-gray-600">
             Try adjusting your search or filter criteria
           </p>
-          <Button onClick={() => setShowProjectForm(true)}>
-            Create your first project
+          <Button>
+            <Link to="/projects/create">Create your first project</Link>
           </Button>
         </div>
       )}
-
-      {/* Project Form */}
-      <ProjectForm
-        showSheet={showProjectForm}
-        setShowSheet={setShowProjectForm}
-      />
     </div>
   );
 }
@@ -218,7 +214,7 @@ export default function Projects() {
 type ProjectCardProps = {
   project: any;
   getPriorityColor: (
-    priority: string
+    priority: string,
   ) =>
     | "high"
     | "medium"
@@ -238,11 +234,11 @@ const ProjectCard = ({
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md">
       <div className="p-6">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+        <div className="mb-4 flex items-start justify-between">
+          <h3 className="line-clamp-2 text-lg font-semibold text-gray-900">
             {truncate(project.title, 15)}
           </h3>
           <Badge variant={getPriorityColor(project.priority)}>
@@ -251,28 +247,29 @@ const ProjectCard = ({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+        <p className="mb-4 line-clamp-3 text-sm text-gray-600">
           {truncate(project.description, 120)}
         </p>
 
         {/* Status */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="mb-4 flex items-center gap-2">
           <Badge
             variant={
               project.status === "Completed"
                 ? "default"
                 : project.status === "In Progress"
-                ? "medium"
-                : project.status === "Planning"
-                ? "low"
-                : "secondary"
-            }>
+                  ? "medium"
+                  : project.status === "Planning"
+                    ? "low"
+                    : "secondary"
+            }
+          >
             {project.status}
           </Badge>
         </div>
 
         {/* Project Details */}
-        <div className="space-y-2 mb-6">
+        <div className="mb-6 space-y-2">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <User className="h-4 w-4" />
             <span>{project.assignedTo}</span>
@@ -289,14 +286,16 @@ const ProjectCard = ({
             variant="outline"
             size="sm"
             className="flex-1"
-            onClick={() => navigate(`/projects/${project.id}`)}>
-            <Eye className="h-4 w-4 mr-2" />
+            onClick={() => navigate(`/projects/${project.id}`)}
+          >
+            <Eye className="mr-2 h-4 w-4" />
             View
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/projects/${project.id}`)}>
+            onClick={() => navigate(`/projects/${project.id}`)}
+          >
             <MessageCircle className="h-4 w-4" />
           </Button>
         </div>
