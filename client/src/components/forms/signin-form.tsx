@@ -2,16 +2,15 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "../ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import axios from "axios";
 const FormSchema = z.object({
   email: z.string().email({
@@ -22,7 +21,7 @@ const FormSchema = z.object({
     .min(8, { message: "Password must be at least 3 characters." }),
 });
 
-const Auth = () => {
+const SignInForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: { email: "", password: "" },
@@ -38,7 +37,7 @@ const Auth = () => {
         {
           body: JSON.stringify(data),
           credentials: "include", // Include cookies for authentication
-        }
+        },
       );
 
       if (response.status !== 200) {
@@ -59,8 +58,8 @@ const Auth = () => {
   }
 
   return (
-    <section className="bg-blue-100 flex items-center justify-center min-h-screen">
-      <div className="bg-white w-[350px] md:max-w-[500px] m-auto p-4 shadow rounded-lg">
+    <section className="flex min-h-screen items-center justify-center bg-blue-100">
+      <div className="m-auto w-[350px] rounded-lg bg-white p-4 shadow md:max-w-[500px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
@@ -99,4 +98,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default SignInForm;
