@@ -4,10 +4,13 @@ import cors from "cors";
 import errorHandler from "./middleware/error.middleware";
 import authRoute from "./routes/auth.route";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json());
+
 app.use(cookieParser());
 app.use(
   cors({
@@ -15,6 +18,8 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+
+
 app.get("/", (req, res) => {
   res.send("this is homepage");
 });

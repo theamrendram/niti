@@ -12,13 +12,14 @@ import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { toast } from "sonner";
 const FormSchema = z.object({
   email: z.string().email({
     message: "Invalid email format",
   }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 3 characters." }),
+    .min(8, { message: "Password must be at least 8 characters." }),
 });
 
 const SignInForm = () => {
@@ -35,25 +36,25 @@ const SignInForm = () => {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/auth/signin`,
         {
-          body: JSON.stringify(data),
-          credentials: "include", // Include cookies for authentication
+          ...data
         },
       );
 
       if (response.status !== 200) {
         const errorData = await response.data;
+        console.log(response.data);
         alert(`Error: ${errorData.error || "Something went wrong"}`);
         return;
       }
-
+      
       // const result = await response.json();
-      alert("Form submitted successfully!");
-
+      toast.success("log in successfull")
+      
       // Handle successful login (e.g., redirect)
       // window.location.href = '/dashboard';
-    } catch (error) {
+    } catch (error:any) {
       console.error("Network error:", error);
-      alert("Network error occurred. Please try again.");
+      toast.error(error?.response.data.message || "");
     }
   }
 
