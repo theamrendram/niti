@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import prismaClient from "../services/prisma.service";
+import { supabase } from "../services/supabase-client";
 
 async function hashPassword(password: string) {
   const saltRounds = parseInt(process.env.SALT_ROUNDS!);
@@ -17,45 +18,45 @@ async function verifyPassword(
   return await bcrypt.compare(inputPassword, hashedPasswordFromDB);
 }
 
-const signIn = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+// const signIn = async (req: Request, res: Response): Promise<void> => {
+//   const { email, password } = req.body;
 
-  if (!email || !password) {
-    res.status(400).json({ error: "Email and password are required" });
-    return;
-  }
+//   if (!email || !password) {
+//     res.status(400).json({ error: "Email and password are required" });
+//     return;
+//   }
 
-  const user = prismaClient.user.findUnique({
-    where: {
-      email,
-    },
-  });
+//   const user = prismaClient.user.findUnique({
+//     where: {
+//       email,
+//     },
+//   });
 
-  if (!user) {
-    res.status(401).json({ error: "Invalid credentials" });
-    return;
-  }
+//   if (!user) {
+//     res.status(401).json({ error: "Invalid credentials" });
+//     return;
+//   }
 
-  if (!verifyPassword(password, user.password)) {
-    res.status(401).json({ error: "Invalid credentials" });
-    return;
-  }
+//   if (!verifyPassword(password, user.password)) {
+//     res.status(401).json({ error: "Invalid credentials" });
+//     return;
+//   }
 
-  const token = jwt.sign(
-    { userId: user.id, role: "admin" },
-    process.env.JWT_SECRET!,
-    { expiresIn: "1h" }
-  );
+//   const token = jwt.sign(
+//     { userId: user.id, role: "admin" },
+//     process.env.JWT_SECRET!,
+//     { expiresIn: "1h" }
+//   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 1000,
-  });
+//   res.cookie("token", token, {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//     maxAge: 60 * 60 * 1000,
+//   });
 
-  res.status(200).json({ message: "Logged in successfully" });
-};
+//   res.status(200).json({ message: "Logged in successfully" });
+// };
 
 const signUp = async (req: Request, res: Response): Promise<void> => {
   const { firstName, lastName, email, password } = req.body;
@@ -119,6 +120,29 @@ const updatePassword = async (req: Request, res: Response): Promise<void> => {
     console.error("Error updating password:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+const signIn = async (req: Request, res: Response): Promise<void> => {
+  const { email, password } = req.body;
+  console.log(email, password, req.body)
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (error) {
+    res.status(400).json({ success: false, message: error.message });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    user: { email: data.user.email, id: data.user.id, role: data.user.role },
+    session: {
+      access_token: data.session.access_token,
+      expires_at: data.session.expires_at,
+    },
+  });
+  return;
 };
 
 export { signIn, signUp, updatePassword };
