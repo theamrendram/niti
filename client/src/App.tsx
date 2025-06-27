@@ -9,8 +9,8 @@ import InboxPage from "./pages/dashboard/inbox";
 import TodoPage from "./pages/dashboard/to-do";
 import { Toaster } from "@/components/ui/sonner";
 import CreateProject from "./pages/project/create-project";
-import SigninPage from "@/pages/signIn-page";
-import SignupPage from "./pages/signup-page";
+import SigninPage from "@/pages/auth/signIn-page";
+import SignupPage from "./pages/auth/signup-page";
 function App() {
   return (
     <>
