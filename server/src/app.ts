@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 // app.use(express.json());
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -19,12 +19,11 @@ app.use(
   })
 );
 
-
 app.get("/", (req, res) => {
   res.send("this is homepage");
 });
 
-app.use("/auth", authRoute);
+app.use("/api/auth", authRoute);
 
 app.use(errorHandler);
 

@@ -34,7 +34,7 @@ const SignInForm = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/signin`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/signin`,
         {
           ...data
         },

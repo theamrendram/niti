@@ -59,28 +59,43 @@ async function verifyPassword(
 // };
 
 const signUp = async (req: Request, res: Response): Promise<void> => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, phone } = req.body;
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password || !phone) {
     res.status(400).json({
-      message: "firstName, lastName, email and password are required",
+      message: "firstName, lastName, email, password and phone are required",
     });
     return;
   }
 
   const hashedPassword = await hashPassword(password);
   console.log(hashedPassword);
+
+  let displayName = firstName + " " + lastName;
   try {
-    const user = await prismaClient.user.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword,
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: { display_name: displayName },
       },
     });
 
-    res.status(200).json({ user: user });
+    let user;
+    if (data.user) {
+      user = await prismaClient.user.create({
+        data: {
+          id: data.user.id,
+          firstName,
+          lastName,
+          email,
+          password: hashedPassword,
+        },
+      });
+    }
+    console.log("user", user);
+    // res.status(201).json({ user: user });
+    res.status(201).json({ user: data });
     return;
   } catch (error: any) {
     console.log("error while signup", error);
@@ -124,7 +139,7 @@ const updatePassword = async (req: Request, res: Response): Promise<void> => {
 
 const signIn = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
-  console.log(email, password, req.body)
+  console.log(email, password, req.body);
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
