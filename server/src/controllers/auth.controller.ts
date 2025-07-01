@@ -27,43 +27,50 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const user = await prismaClient.user.findUnique({
-    where: {
-      email,
-    },
-  });
+  try {
+    const user = await prismaClient.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-  if (!user) {
-    res.status(401).json({ error: "Invalid credentials" });
-    return;
+    if (!user) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+    if (!(await verifyPassword(password, user.password))) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
+    }
+    const token = generateToken({ email: user.email, id: user.id });
+
+    res.cookie("_auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged in successfully",
+      data: {
+        id: user.id,
+        email: user.email,
+        fullName: user.firstName + " " + user.lastName,
+      },
+    });
+  } catch (error: any) {
+    console.log("Error occurred when signing in");
+    res.status(401).json({
+      success: false,
+      message: "some error occurred",
+    });
   }
-  
-  if (!verifyPassword(password, user.password)) {
-    res.status(401).json({ error: "Invalid credentials" });
-    return;
-  }
-  const token = generateToken({ email: user.email, id: user.id });
-
-  res.cookie("_auth_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 1000,
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Logged in successfully",
-    data: {
-      id: user.id,
-      email: user.email,
-      fullName: user.firstName + " " + user.lastName,
-    },
-  });
 };
 
 const signUp = async (req: Request, res: Response): Promise<void> => {
-  const { firstName, lastName, email, password, phone } = req.body;
+  const { firstName, lastName, email, password, phone = 1234567890 } = req.body;
 
   if (!firstName || !lastName || !email || !password || !phone) {
     res.status(400).json({
@@ -75,7 +82,6 @@ const signUp = async (req: Request, res: Response): Promise<void> => {
   const hashedPassword = await hashPassword(password);
   console.log(hashedPassword);
 
-  let displayName = firstName + " " + lastName;
   try {
     const user = await prismaClient.user.create({
       data: {

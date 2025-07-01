@@ -11,8 +11,9 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
-import axios from "axios";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import axiosInstance from "@/lib/axios";
 const FormSchema = z.object({
   email: z.string().email({
     message: "Invalid email format",
@@ -33,28 +34,25 @@ const SignInForm = () => {
     console.log("All env vars:", import.meta.env);
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/signin`,
-        {
-          ...data
-        },
-      );
+      const response = await axiosInstance.post("/api/auth/signin", {
+        ...data,
+      });
 
+      console.log("response", response);
       if (response.status !== 200) {
-        const errorData = await response.data;
+        const errorData = response.data;
         console.log(response.data);
-        alert(`Error: ${errorData.error || "Something went wrong"}`);
+        toast.error(`Error: ${errorData.error || "Something went wrong"}`);
         return;
       }
-      
-      // const result = await response.json();
-      toast.success("log in successfull")
-      
+
+      toast.success("log in successful");
+
       // Handle successful login (e.g., redirect)
-      // window.location.href = '/dashboard';
-    } catch (error:any) {
-      console.error("Network error:", error);
-      toast.error(error?.response.data.message || "");
+      window.location.href = "/dashboard";
+    } catch (error: any) {
+      console.log("Network error:", error);
+      toast.error(error?.response.data?.error || "something went wrong");
     }
   }
 
@@ -93,6 +91,12 @@ const SignInForm = () => {
               Login
             </Button>
           </form>
+          <p className="py-2 text-center">
+            Already have an account{" "}
+            <Link to={"/auth/signin"} className="text-blue-700 underline">
+              Sign In
+            </Link>
+          </p>
         </Form>
       </div>
     </section>

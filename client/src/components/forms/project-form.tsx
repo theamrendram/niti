@@ -23,6 +23,7 @@ import {
 
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "sonner";
+import axiosInstance from "@/lib/axios";
 const teamMembers = [
   {
     id: 1,
@@ -84,10 +85,21 @@ const ProjectForm = () => {
     },
   });
 
-  const handleCreateProject = (data: z.infer<typeof projectFormSchema>) => {
+  const handleCreateProject = async (
+    data: z.infer<typeof projectFormSchema>,
+  ) => {
     console.log("Create Project", data);
-    // TODO: call API or service to create project
-    toast.success("Project created successfully");
+    try {
+      const response = await axiosInstance.post("/api/project/create", data);
+
+      if (response.status !== 201) {
+        toast.error("network error");
+        return;
+      }
+      toast.success("Project created successfully");
+    } catch (error: any) {
+      toast.error(error.response.data.message || "Some unknown error occurred");
+    }
   };
 
   return (
