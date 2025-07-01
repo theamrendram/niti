@@ -2,9 +2,15 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import errorHandler from "./middleware/error.middleware";
-import authRoute from "./routes/auth.route";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+
+// middlewares
+import { authHandler } from "./middleware/auth.middleware";
+
+// routes
+import authRoutes from "./routes/auth.route";
+import projectRoutes from "./routes/project.route";
 dotenv.config();
 
 const app = express();
@@ -23,7 +29,8 @@ app.get("/", (req, res) => {
   res.send("this is homepage");
 });
 
-app.use("/api/auth", authRoute);
+app.use("/api/auth", authRoutes);
+app.use("/api/project", authHandler, projectRoutes);
 
 app.use(errorHandler);
 
