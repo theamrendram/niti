@@ -104,10 +104,11 @@ const signUp = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({ user: user });
     return;
   } catch (error: any) {
-    console.log("error while signup", error);
-    res
-      .status(400)
-      .json({ message: "Some error occurred", error: error.message });
+    console.log("error while signup", error.message);
+    if (error.code === "P2002") {
+      res.status(400).json({ error: null, message: "Email already exists" });
+    }
+    res.status(400).json({ error: error.message, message: error.message });
     return;
   }
 };

@@ -24,6 +24,8 @@ import {
 import { MultiSelect } from "../ui/multi-select";
 import { toast } from "sonner";
 import axiosInstance from "@/lib/axios";
+import { useSelector } from "react-redux";
+
 const teamMembers = [
   {
     id: 1,
@@ -84,6 +86,13 @@ const ProjectForm = () => {
       teamMembers: teamMembers.map((member) => member.id.toString()),
     },
   });
+
+  const user = useSelector((state: any) => ({
+    id: state.user.id,
+    email: state.user.email,
+    fullName: state.user.fullName,
+  }));
+  console.log("user", user);
 
   const handleCreateProject = async (
     data: z.infer<typeof projectFormSchema>,
@@ -175,4 +184,5 @@ const ProjectForm = () => {
     </Form>
   );
 };
+
 export { ProjectForm };

@@ -58,16 +58,17 @@ const SignupForm = () => {
   });
 
   async function onSubmit(data: FormValues) {
-    console.log("✅ Form submitted successfully!");
     console.log("form data", data);
     try {
       const response = await axiosInstance.post("/api/auth/signup", data);
       if (response.status === 201) {
         console.log("response", response);
         toast.success("Signup successful!");
+        window.location.href = "/dashboard";
       }
     } catch (error: any) {
-      toast.error(error);
+      console.log("errors", error);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 

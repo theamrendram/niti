@@ -14,6 +14,9 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import axiosInstance from "@/lib/axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "@/store/user.slice";
+
 const FormSchema = z.object({
   email: z.string().email({
     message: "Invalid email format",
@@ -28,6 +31,8 @@ const SignInForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: { email: "", password: "" },
   });
+
+  const dispatch = useDispatch();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("data", data);
@@ -47,6 +52,7 @@ const SignInForm = () => {
       }
 
       toast.success("log in successful");
+      dispatch(addUser(response.data?.data));
 
       // Handle successful login (e.g., redirect)
       window.location.href = "/dashboard";
